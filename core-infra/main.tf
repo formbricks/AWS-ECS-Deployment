@@ -3,18 +3,16 @@ provider "aws" {
 }
 
 data "aws_availability_zones" "available" {}
-data "aws_caller_identity" "current" {}
 
 locals {
-  name   = "core-infra"
-  region = "us-east-2"
+  name   = "dev_formbricks"
+  region = "us-east-1"
 
   vpc_cidr = "10.0.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
   tags = {
-    Blueprint  = local.name
-    GithubRepo = "github.com/aws-ia/ecs-blueprints"
+    Environment  = "dev"
   }
 }
 
@@ -22,9 +20,9 @@ locals {
 # ECS Blueprint
 ################################################################################
 
-module "ecs" {
-  source  = "terraform-aws-modules/ecs/aws"
-  version = "~> 5.0"
+module "ecs_cluster" {
+  source  = "terraform-aws-modules/ecs/aws//modules/cluster"
+  version = "~> 5.6"
 
   cluster_name = local.name
 
@@ -37,12 +35,17 @@ module "ecs" {
     FARGATE_SPOT = {}
   }
 
-  # Shared task execution role
-  create_task_exec_iam_role = true
-  # Allow read access to all SSM params in current account for demo
-  task_exec_ssm_param_arns = ["arn:aws:ssm:${local.region}:${data.aws_caller_identity.current.account_id}:parameter/*"]
-  # Allow read access to all secrets in current account for demo
-  task_exec_secret_arns = ["arn:aws:secretsmanager:${local.region}:${data.aws_caller_identity.current.account_id}:secret:*"]
+  tags = local.tags
+}
+
+################################################################################
+# Service Discovery
+################################################################################
+
+resource "aws_service_discovery_private_dns_namespace" "this" {
+  name        = "default.${local.name}.local"
+  description = "Service discovery <namespace>.<clustername>.local"
+  vpc         = module.vpc.vpc_id
 
   tags = local.tags
 }
@@ -53,7 +56,7 @@ module "ecs" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 3.0"
+  version = "~> 5.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -62,9 +65,8 @@ module "vpc" {
   public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 10)]
 
-  enable_nat_gateway   = true
-  single_nat_gateway   = true
-  enable_dns_hostnames = true
+  enable_nat_gateway = true
+  single_nat_gateway = false
 
   # Manage so we can name
   manage_default_network_acl    = true
@@ -73,18 +75,6 @@ module "vpc" {
   default_route_table_tags      = { Name = "${local.name}-default" }
   manage_default_security_group = true
   default_security_group_tags   = { Name = "${local.name}-default" }
-
-  tags = local.tags
-}
-
-################################################################################
-# Service discovery namespaces
-################################################################################
-
-resource "aws_service_discovery_private_dns_namespace" "this" {
-  name        = "default.${local.name}.local"
-  description = "Service discovery namespace.clustername.local"
-  vpc         = module.vpc.vpc_id
 
   tags = local.tags
 }
