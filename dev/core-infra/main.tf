@@ -1,5 +1,5 @@
 locals {
-  name   = "dev-core-infra"
+  name   = "dev_core_infra"
   region = "us-east-1"
   vpc_cidr = "10.0.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
@@ -21,7 +21,7 @@ data "aws_availability_zones" "available" {}
 module "ecs_cluster" {
   source  = "terraform-aws-modules/ecs/aws//modules/cluster"
   version = "~> 5.6"
-  cluster_name = "ecs_cluster" + local.name
+  cluster_name = join("_", ["ecs_cluster", local.name])
   cluster_service_connect_defaults = {
     namespace = aws_service_discovery_private_dns_namespace.this.arn
   }
@@ -66,12 +66,13 @@ module "vpc" {
   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 10)]
   enable_nat_gateway = true
   single_nat_gateway = false
+  one_nat_gateway_per_az = true
   # Manage so we can name
   manage_default_network_acl    = true
-  default_network_acl_tags      = { Name = "${local.name}-default-network-acl" }
+  default_network_acl_tags      = { Name = "${local.name}_default_network_acl" }
   manage_default_route_table    = true
-  default_route_table_tags      = { Name = "${local.name}-default-route-table" }
+  default_route_table_tags      = { Name = "${local.name}_default_route_table" }
   manage_default_security_group = true
-  default_security_group_tags   = { Name = "${local.name}-default-security-group" }
+  default_security_group_tags   = { Name = "${local.name}_default_security_group" }
   tags = local.tags
 }
