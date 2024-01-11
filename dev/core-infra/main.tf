@@ -21,7 +21,7 @@ data "aws_availability_zones" "available" {}
 module "ecs_cluster" {
   source  = "terraform-aws-modules/ecs/aws//modules/cluster"
   version = "~> 5.6"
-  cluster_name = join("_", ["ecs_cluster", local.name])
+  cluster_name = "ecs_cluster_${local.name}"
   cluster_service_connect_defaults = {
     namespace = aws_service_discovery_private_dns_namespace.this.arn
   }
