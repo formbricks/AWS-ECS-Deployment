@@ -1,6 +1,6 @@
 
 # Core Infrastructure
-This folder contains the Terraform code to deploy the core infratructure for an ECS Fargate workload. The AWS resources created by the script are:
+This folder contains the Terraform code to deploy the core infrastructure for an ECS Fargate workload. The AWS resources created by the script are:
 * Networking
 	 * VPC
 	   * 3 public subnets, 1 per AZ. If a region has less than 3 AZs it will create same number of public subnets as AZs.
@@ -13,7 +13,7 @@ This folder contains the Terraform code to deploy the core infratructure for an 
 * CloudMap service discovery namespace `default.dev-core-infra-service-discovery.local`
 
 # Deployment
-* Add acesss key to the shell.
+* Add access key to the shell.
 	```shell
 	export AWS_ACCESS_KEY_ID=
 	export AWS_SECRET_ACCESS_KEY=
@@ -28,7 +28,7 @@ This folder contains the Terraform code to deploy the core infratructure for an 
 	terraform apply --auto-approve
 	```
 ## Outputs
-After the execution of the Terraform code you will get an output with needed IDs and values needed as input for the nexts Terraform applies. 
+After the execution of the Terraform code you will get an output with needed IDs and values needed as input for the next Terraform applies. 
 
 ## Cleanup
 Run the following command if you want to delete all the resources created before. If you have created other blueprints and they use these infrastructure then destroy those blueprint resources first.
