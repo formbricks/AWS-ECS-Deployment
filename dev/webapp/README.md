@@ -1,31 +1,45 @@
-# ECS load-balanced service
 
-This solution blueprint creates a web-facing load balanced ECS service. There are two steps to deploying this service:
+# Webapp Infrastructure
+This folder contains the Terraform code to deploy the webapp containers via ECS Fargate workload. The AWS resources created by the script are:
 
-* Deploy the [core-infra](../core-infra/README.md). Note if you have already deployed the `core-infra` then you can reuse it.
-* Deploy this blueprint using the below commands
-```shell
-terraform init
-terraform plan
-terraform apply -auto-approve
-```
+*  ECS Service with the following config:
+	* Always runs three instances of tasks.
+	* Task execution IAM roles are created to access secrets manager.
+	* ECS service is also registered in CloudMap to make it discoverable by DNS.
 
-<p align="center">
-  <img src="../../../docs/lb-service.png"/>
-</p>
+* Tasks for ECS service, which will be deployed in private subnets.
 
-The solution has following key components:
+* ALB: We are using Application Load Balancer for distributing traffic. This evenly distributes the traffic among containers in the three availability zones. 
+	* Key attributes for ALB:
+		* ALB security group - allows ingress from any IP address to port 80 and allows all egress
+		* ALB subnet - ALB is created in a public subnet. 
+		* Listener - listens on port 80 for protocol HTTP
 
-* ALB: We are using Application Load Balancer for this service. Note the following key attributes for ALB:
-    * ALB security group - allows ingress from any IP address to port 80 and allows all egress
-    * ALB subnet - ALB is created in a public subnet
-    * Listener - listens on port 80 for protocol HTTP
-    * Target group - Since we are using Fargate launch type, the targe type is IP since each task in Fargate gets its own ENI and IP address. The target group has container port (3000) and protocol (HTTP) where the application container will serve requests. The ALB runs health check against all registered targets. In this example, ALB send HTTP GET request to path "/" to container port 3000. We are using target group default health check settings. You can tune these settings to adjust the time interval and frequency of health checks. It impacts how fast tasks become available to serve traffic. (See [ALB target health check documentation](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html) to learn more.)
-* ECR registery for the container image. We are using only one container image for the task in this example.
-* ECS service definition:
-    * Task security group: allows ingress for TCP from the ALB security group to the container service port (3000 for this example). And allows all egress.
-    * Service discovery: You can register the service to AWS Cloud Map registry. You just need to provide the `namespace` but make sure the namespace is created in the `core-infra` step.
-    * Tasks for this service will be deployed in private subnet
-    * Service definition takes the load balancer target group created above as input.
-    * Task definition consisting of task vCPU size, task memory, and container information including the above created ECR repository URL.
-    * Task definition also takes the task execution role ARN which is used by ECS agent to fetch ECR images and send logs to AWS CloudWatch on behalf of the task.
+* Task security group: allows ingress for TCP from the ALB security group to the container service port (3000). And allows all egress.
+
+
+# Deployment
+* First deploy the core-infra for dev.
+* Add access key to the shell.
+	```shell
+	export AWS_ACCESS_KEY_ID=
+	export AWS_SECRET_ACCESS_KEY=
+	```
+* Run Terraform init to download the providers and install the modules
+	```shell
+	terraform init
+	```
+* Review the terraform plan output, take a look at the changes that terraform will execute, and then apply them:
+	```shell
+	terraform plan
+	terraform apply --auto-approve
+	```
+### Outputs
+After the execution of the Terraform code you will get an ALB url as output which can be used to access the webapp on the internet.  
+
+### Cleanup
+Run the following command if you want to delete all the resources created before. If you have created other blueprints and they use these infrastructure then destroy those blueprint resources first.
+	```shell
+	terraform destroy
+	```
+ 
