@@ -87,7 +87,11 @@ module "ecs_service" {
       environment = [
         {
           name  = "WEBAPP_URL",
-          value = "http://${module.alb.dns_name}"
+          value = "http://${module.alb.dns_name}" 
+        },
+        {
+          name  = "NEXTAUTH_URL",
+          value = "http://${module.alb.dns_name}" 
         }
       ] 
     }
