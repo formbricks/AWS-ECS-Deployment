@@ -90,7 +90,7 @@ module "ecs_service" {
           value = "http://${module.alb.dns_name}" 
         },
         {
-          name  = "NEXTAUTH_URL",
+          name  = "WEBAPP_URL",
           value = "http://${module.alb.dns_name}" 
         }
       ] 
@@ -132,7 +132,7 @@ module "ecs_service" {
 }
 
 resource "aws_service_discovery_service" "this" {
-  name = local.name
+  name = "${local.name}-service-discovery"
 
   dns_config {
     namespace_id = data.aws_service_discovery_dns_namespace.this.id
@@ -251,7 +251,6 @@ data "aws_ecs_cluster" "core_infra" {
 }
 
 data "aws_service_discovery_dns_namespace" "this" {
-  # name = "default.${data.aws_ecs_cluster.core_infra.cluster_name}.local"
-  name = "default.dev-core-infra-service-discovery.local"
+  name = "dev-core-infra_service_discovery_private_dns_namespace"
   type = "DNS_PRIVATE"
 }

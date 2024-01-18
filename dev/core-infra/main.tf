@@ -46,8 +46,8 @@ module "ecs_cluster" {
 ################################################################################
 
 resource "aws_service_discovery_private_dns_namespace" "this" {
-  name        = "default.${local.name}-service-discovery.local"
-  description = "Service discovery default.dev-core-infra-service-discovery.local"
+  name        = "${local.name}_service_discovery_private_dns_namespace"
+  description = "Service discovery for dev-core-infra"
   vpc         = module.vpc.vpc_id
   tags = local.tags
 }
