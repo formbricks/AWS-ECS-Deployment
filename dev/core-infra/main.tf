@@ -1,3 +1,9 @@
+provider "aws" {
+  region = local.region
+}
+
+data "aws_availability_zones" "available" {}
+
 locals {
   name   = "dev-core-infra"
   region = "us-east-1"
@@ -7,12 +13,6 @@ locals {
     Environment  = "dev"
   }
 }
-
-provider "aws" {
-  region = local.region
-}
-
-data "aws_availability_zones" "available" {}
 
 ################################################################################
 # ECS Blueprint
@@ -46,7 +46,7 @@ module "ecs_cluster" {
 ################################################################################
 
 resource "aws_service_discovery_private_dns_namespace" "this" {
-  name        = "default.${local.name}.local"
+  name        = "default.${local.name}-service-discovery.local"
   description = "Service discovery default.dev-core-infra.local"
   vpc         = module.vpc.vpc_id
   tags = local.tags
@@ -59,15 +59,19 @@ resource "aws_service_discovery_private_dns_namespace" "this" {
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 5.0"
+
   name = "${local.name}-vpc"
   cidr = local.vpc_cidr
+
   azs             = local.azs
   public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 10)]
+  
   # Redundancy
   enable_nat_gateway = true
   single_nat_gateway = false
   one_nat_gateway_per_az = true
+  
   # Manage so we can name
   manage_default_network_acl    = true
   default_network_acl_tags      = { Name = "${local.name}-default-network-acl" }
