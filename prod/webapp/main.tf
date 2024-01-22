@@ -63,7 +63,7 @@ module "ecs_service" {
     source  = "terraform-aws-modules/ecs/aws//modules/service"
     version = "~> 5.6"
 
-    name          = "dev-webapp-ecs-service"
+    name          = "prod-webapp-ecs-service"
     desired_count = 3
     cluster_arn   = data.aws_ecs_cluster.core_infra.arn
 
@@ -71,7 +71,7 @@ module "ecs_service" {
     
     # Task Definition IAM Roles
     create_task_exec_iam_role  = true
-    task_exec_iam_role_name    = "ecsTaskExecutionRole-prod-webapp-tasks"
+    task_exec_iam_role_name    = "ecsTaskExecRole-prod-webapp-tasks"
     create_task_exec_policy    = true
     task_exec_secret_arns      = []
     task_exec_ssm_param_arns   = []
