@@ -90,7 +90,7 @@ module "ecs_service" {
           value = "http://${module.alb.dns_name}" 
         },
         {
-          name  = "WEBAPP_URL",
+          name  = "NEXTAUTH_URL",
           value = "http://${module.alb.dns_name}" 
         }
       ] 
