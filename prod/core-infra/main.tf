@@ -43,7 +43,8 @@ module "ecs_cluster" {
       }
     }
   }
-  enable_cloudwatch_logging = true
+  create_cloudwatch_log_group = true
+  cloudwatch_log_group_retention_in_days = 45
   cluster_settings = [
     {
       name  = "containerInsights"
