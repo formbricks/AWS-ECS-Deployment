@@ -1,6 +1,11 @@
-variable "region" {
-  type    = string
-  default = "us-east-1"
+terraform {
+  cloud {
+    organization = "Formbricks"
+
+    workspaces {
+      name = "Prod-Core-Infra-ECS"
+    }
+  }
 }
 
 locals {
