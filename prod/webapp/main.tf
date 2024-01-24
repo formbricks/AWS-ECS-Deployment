@@ -1,6 +1,11 @@
-variable "region" {
-    type    = string
-    default = "us-east-1"
+terraform {
+  cloud {
+    organization = "Formbricks"
+
+    workspaces {
+      name = "ECS-Formbricks-Prod"
+    }
+  }
 }
 
 locals {
@@ -73,7 +78,7 @@ module "ecs_service" {
     create_task_exec_iam_role  = true
     task_exec_iam_role_name    = "ecsTaskExecRole-prod-webapp-tasks"
     create_task_exec_policy    = true
-    task_exec_secret_arns      = []
+    task_exec_secret_arns      = var.secrets_access_IAM_roles_arn
     task_exec_ssm_param_arns   = []
 
     container_definitions = {
