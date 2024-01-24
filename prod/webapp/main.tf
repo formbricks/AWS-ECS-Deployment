@@ -1,19 +1,19 @@
 terraform {
-  cloud {
-    organization = "Formbricks"
+    cloud {
+        organization = "Formbricks"
 
-    workspaces {
-      name = "ECS-Formbricks-Prod"
+        workspaces {
+            name = "Prod-Webapp-ECS"
+        }
     }
-  }
 }
 
 locals {
-    name            = "prod-webapp"
-    container_port  = 3000
-    container_name  = "prod-webapp-container"
+    name           = "prod-webapp"
+    container_port = 3000
+    container_name = "prod-webapp-container"
     tags = {
-        Environment  = "prod"
+        Environment = "prod"
     }
 }
 
@@ -73,13 +73,13 @@ module "ecs_service" {
     cluster_arn   = data.aws_ecs_cluster.core_infra.arn
 
     enable_execute_command = false
-    
+
     # Task Definition IAM Roles
-    create_task_exec_iam_role  = true
-    task_exec_iam_role_name    = "ecsTaskExecRole-prod-webapp-tasks"
-    create_task_exec_policy    = true
-    task_exec_secret_arns      = var.secrets_access_IAM_roles_arn
-    task_exec_ssm_param_arns   = []
+    create_task_exec_iam_role = true
+    task_exec_iam_role_name   = "ecsTaskExecRole-prod-webapp-tasks"
+    create_task_exec_policy   = true
+    task_exec_secret_arns     = values(var.secrets_manager_data)[*]
+    task_exec_ssm_param_arns  = []
 
     container_definitions = {
         (local.container_name) = {
@@ -91,8 +91,14 @@ module "ecs_service" {
                     containerPort = local.container_port
                 }
             ]
-            secrets      = []
-            environment  = [] 
+            secrets = [
+                for key, value in var.secrets_manager_data :
+                {
+                    name      = key
+                    valueFrom = "${value}:${key}::"
+                }
+            ]
+            environment = []
         }
     }
 
@@ -164,11 +170,11 @@ module "alb" {
 
     security_group_ingress_rules = {
         all_http = {
-            from_port     = 80
-            to_port       = 80
-            ip_protocol   = "tcp"
-            description   = "HTTP web traffic"
-            cidr_ipv4     = "0.0.0.0/0"
+            from_port   = 80
+            to_port     = 80
+            ip_protocol = "tcp"
+            description = "HTTP web traffic"
+            cidr_ipv4   = "0.0.0.0/0"
         }
     }
 
