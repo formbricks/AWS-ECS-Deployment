@@ -169,13 +169,13 @@ module "alb" {
     subnets = data.aws_subnets.public.ids
 
     security_group_ingress_rules = {
-        all_http = {
-            from_port   = 80
-            to_port     = 80
-            ip_protocol = "tcp"
-            description = "HTTP web traffic"
-            cidr_ipv4   = "0.0.0.0/0"
-        }
+        all_https = {
+      from_port   = 443
+      to_port     = 443
+      ip_protocol = "tcp"
+      description = "HTTPS web traffic"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
     }
 
     security_group_egress_rules = {
@@ -187,9 +187,10 @@ module "alb" {
     }
 
     listeners = {
-        http = {
-            port     = "80"
-            protocol = "HTTP"
+        https = {
+                port            = 443
+                protocol        = "HTTPS"
+                certificate_arn = var.formbricks_ssl_certificate_arn
 
             forward = {
                 target_group_key = "ecs-task"
@@ -199,7 +200,7 @@ module "alb" {
 
     target_groups = {
         ecs-task = {
-            backend_protocol = "HTTP"
+            backend_protocol = "HTTPS"
             backend_port     = local.container_port
             target_type      = "ip"
 

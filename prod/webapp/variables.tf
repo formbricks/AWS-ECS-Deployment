@@ -3,7 +3,6 @@ variable "region" {
   default = "us-east-1"
 }
 
-
 variable "secrets_manager_data" {
   type = map(string)
   default = {
@@ -26,4 +25,9 @@ variable "secrets_manager_data" {
     "SMTP_USER"              = "SMTP_USER"
     "NEXTAUTH_SECRET"        = "NEXTAUTH_SECRET"
   }
+}
+
+variable "formbricks_ssl_certificate_arn" {
+  type    = string
+  default = ""
 }
