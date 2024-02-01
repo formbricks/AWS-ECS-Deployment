@@ -3,6 +3,11 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "container_image" {
+  type    = string
+  default = "ghcr.io/formbricks/formbricks-experimental:latest"
+}
+
 variable "secrets_manager_data" {
   type = map(string)
   default = {

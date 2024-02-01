@@ -69,10 +69,15 @@ module "ecs_service" {
     version = "~> 5.6"
 
     name          = "prod-webapp-ecs-service"
-    desired_count = 3
     cluster_arn   = data.aws_ecs_cluster.core_infra.arn
 
     enable_execute_command = false
+
+    desired_count = 3
+
+    autoscaling_min_capacity = 3
+    autoscaling_max_capacity = 6
+    
 
     # Task Definition IAM Roles
     create_task_exec_iam_role = true
@@ -83,7 +88,9 @@ module "ecs_service" {
 
     container_definitions = {
         (local.container_name) = {
-            image                    = "formbricks/formbricks"
+            image                    = var.container_image
+            cpu                      = "1024"
+            memory                   = "2048"
             readonly_root_filesystem = false
             port_mappings = [
                 {
@@ -99,6 +106,10 @@ module "ecs_service" {
                 }
             ]
             environment = []
+            
+        #     health_check = {
+        #     command = ["CMD-SHELL", "curl -f https://localhost:${local.container_port}/health || exit 1"] # TODO ENABLE CURL IN CONTAINER
+        #   }
         }
     }
 
@@ -169,7 +180,7 @@ module "alb" {
     subnets = data.aws_subnets.public.ids
 
     security_group_ingress_rules = {
-        all_https = {
+      all_https = {
       from_port   = 443
       to_port     = 443
       ip_protocol = "tcp"
@@ -211,7 +222,7 @@ module "alb" {
                 matcher             = "200-299"
                 path                = "/"
                 port                = "traffic-port"
-                protocol            = "HTTP"
+                protocol            = "HTTPS"
                 timeout             = 5
                 unhealthy_threshold = 2
             }
