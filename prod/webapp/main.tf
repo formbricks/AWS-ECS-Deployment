@@ -215,17 +215,17 @@ module "alb" {
             backend_port     = local.container_port
             target_type      = "ip"
 
-            health_check = {
-                enabled             = true
-                healthy_threshold   = 5
-                interval            = 30
-                matcher             = "200-299"
-                path                = "/"
-                port                = "traffic-port"
-                protocol            = "HTTPS"
-                timeout             = 5
-                unhealthy_threshold = 2
-            }
+            # health_check = {
+            #     enabled             = true
+            #     healthy_threshold   = 5
+            #     interval            = 30
+            #     matcher             = "200-299"
+            #     path                = "/"
+            #     port                = "traffic-port"
+            #     protocol            = "HTTPS"
+            #     timeout             = 5
+            #     unhealthy_threshold = 2
+            # }
 
             # There's nothing to attach here in this definition. Instead,
             # ECS will attach the IPs of the tasks to this target group
