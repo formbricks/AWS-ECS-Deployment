@@ -88,7 +88,7 @@ module "ecs_service" {
 
     container_definitions = {
         (local.container_name) = {
-            image                    = var.container_image
+            image                    = var.TF_VAR_container_image
             cpu                      = "1024"
             memory                   = "2048"
             readonly_root_filesystem = false
@@ -106,10 +106,6 @@ module "ecs_service" {
                 }
             ]
             environment = []
-            
-        #     health_check = {
-        #     command = ["CMD-SHELL", "curl -f https://localhost:${local.container_port}/health || exit 1"] # TODO ENABLE CURL IN CONTAINER
-        #   }
         }
     }
 
@@ -211,21 +207,21 @@ module "alb" {
 
     target_groups = {
         ecs-task = {
-            backend_protocol = "HTTPS"
+            backend_protocol = "HTTP"
             backend_port     = local.container_port
             target_type      = "ip"
 
-            # health_check = {
-            #     enabled             = true
-            #     healthy_threshold   = 5
-            #     interval            = 30
-            #     matcher             = "200-299"
-            #     path                = "/"
-            #     port                = "traffic-port"
-            #     protocol            = "HTTPS"
-            #     timeout             = 5
-            #     unhealthy_threshold = 2
-            # }
+            health_check = {
+                enabled             = true
+                healthy_threshold   = 5
+                interval            = 30
+                matcher             = "200-299"
+                path                = "/health"
+                port                = "traffic-port"
+                protocol            = "HTTP"
+                timeout             = 5
+                unhealthy_threshold = 2
+            }
 
             # There's nothing to attach here in this definition. Instead,
             # ECS will attach the IPs of the tasks to this target group

@@ -3,7 +3,7 @@ variable "region" {
   default = "us-east-1"
 }
 
-variable "container_image" {
+variable "TF_VAR_container_image" {
   type    = string
   default = "ghcr.io/formbricks/formbricks-experimental:latest"
 }
