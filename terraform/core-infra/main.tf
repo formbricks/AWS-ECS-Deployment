@@ -1,17 +1,7 @@
-terraform {
-  cloud {
-    organization = "Formbricks"
-
-    workspaces {
-      name = "Prod-Core-Infra-ECS"
-    }
-  }
-}
-
 locals {
-  name    = "prod-core-infra"
+  name    = "prod-core-infra-formbricks"
   vpc_cidr = "10.0.0.0/16"
-  azs     = slice(data.aws_availability_zones.available.names, 0, 3)
+  azs     = slice(data.aws_availability_zones.available.names, 0, 2)
   tags    = {
     Environment = "prod"
   }
@@ -31,7 +21,7 @@ module "ecs_cluster" {
   source  = "terraform-aws-modules/ecs/aws//modules/cluster"
   version = "~> 5.6"
 
-  cluster_name = "${local.name}-ecs-cluster"
+  cluster_name = "${local.name}-cluster"
   cluster_service_connect_defaults = {
     namespace = aws_service_discovery_private_dns_namespace.this.arn
   }
@@ -64,7 +54,7 @@ module "ecs_cluster" {
 
 resource "aws_service_discovery_private_dns_namespace" "this" {
   name        = "${local.name}-service-discovery-private-dns-namespace"
-  description = "Service discovery for prod-core-infra"
+  description = "Service discovery for prod-core-infra-formbricks"
   vpc         = module.vpc.vpc_id
   tags        = local.tags
 }

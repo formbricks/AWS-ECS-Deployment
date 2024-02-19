@@ -3,23 +3,8 @@
 ################################################################################
 
 output "vpc_id" {
-  description = "The ID of the VPC"
+  description = "The ID of the VPC" 
   value       = module.vpc.vpc_id
-}
-
-output "public_subnets" {
-  description = "A list of public subnets"
-  value       = module.vpc.public_subnets
-}
-
-output "private_subnets" {
-  description = "A list of private subnets for the client app"
-  value       = module.vpc.private_subnets
-}
-
-output "private_subnets_cidr_blocks" {
-  description = "A list of private subnets CIDRs"
-  value       = module.vpc.private_subnets_cidr_blocks
 }
 
 ################################################################################
@@ -34,11 +19,6 @@ output "cluster_arn" {
 output "cluster_id" {
   description = "ID that identifies the cluster"
   value       = module.ecs_cluster.id
-}
-
-output "cluster_name" {
-  description = "Name that identifies the cluster"
-  value       = module.ecs_cluster.name
 }
 
 output "service_discovery_namespaces" {
