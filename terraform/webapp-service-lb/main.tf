@@ -1,12 +1,23 @@
-terraform {
-    cloud {
-        organization = "Formbricks"
+################################################################################
+# (Optional) Integrating Terraform Cloud
+################################################################################
 
-        workspaces {
-            name = "Prod-Webapp-ECS"
-        }
+# To use Terraform Cloud, follow these steps:
+
+# 1. Uncomment the code block below.
+# 2. Replace placeholders "your-organization-name" and "your-workspace-name" with your actual Terraform Cloud organization and workspace names.
+# 3. Refer to the Terraform Cloud documentation for details: https://developer.hashicorp.com/terraform/cloud-docs/overview
+
+/*
+terraform {
+  cloud {
+    organization = "your-organization-name"
+    workspaces {
+      name = "your-workspace-name"
     }
+  }
 }
+*/
 
 locals {
     name           = "prod-webapp"
