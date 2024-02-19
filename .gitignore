@@ -33,8 +33,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Ignore devcontainer files
-.devcontainer
-
 #Ignore scratch file
 scratch*

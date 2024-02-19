@@ -9,3 +9,8 @@ Design Decions:
 - Fargate compute allocation strategy: We require the ECS service to use a 50-50 mix of Fargate dedicated and Fargate Spot. With at least 20% of the containers running on dedicated Fargate compute. This allows us to stay cost-effective while ensuring reliability.
 - Secrets manager is not deployed via Terraform. As we need to share secrets across deployments, it doesn't make sense to redeploy secrets manager every time as that would entail losing the secrets and setting the secrets manager again.
 - Using Secrets Manager to store sensitive information. Our web app requires sensitive information such as DB URL, Next Auth secret, etc., to be passed to the containers as environment variables. Instead of directly passing environment variables as plain text while deploying infra, we instead grant IAM read access to secrets to the ECS task (containers). This allows us to securely inject sensitive data into the containers.
+
+# Development Setup
+We use a devcontainer setup by AWSLabs to quickly grt development environment up and running quickly.
+Read more about it here: https://github.com/awslabs/aws-terraform-dev-container
+ 
