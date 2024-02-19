@@ -32,7 +32,7 @@ variable "secrets_manager_data" {
   }
 }
 
-variable "formbricks_ssl_certificate_arn" {
+variable "ssl_certificate_arn" {
   type    = string
   default = ""
 }

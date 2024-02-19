@@ -20,11 +20,12 @@ terraform {
 */
 
 locals {
-  name           = "webapp"
+  name           = "webapp-formbricks"
   container_port = 3000
   container_name = "webapp-container-formbricks"
   tags = {
     Environment = "prod"
+    Application = "formbricks"
   }
 }
 
@@ -79,7 +80,7 @@ module "ecs_service" {
   source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 5.6"
 
-  name        = "formbricks-webapp-service"
+  name        = "${local.name}-service"
   cluster_arn = data.aws_ecs_cluster.core_infra.arn
 
   enable_execute_command = false
@@ -92,14 +93,14 @@ module "ecs_service" {
 
   # Task Definition IAM Roles
   create_task_exec_iam_role = true
-  task_exec_iam_role_name   = "ecsTaskExecRole-prod-webapp-tasks"
+  task_exec_iam_role_name   = "webapp-formbricks-ecsTaskExecRole"
   create_task_exec_policy   = true
   task_exec_secret_arns     = values(var.secrets_manager_data)[*]
   task_exec_ssm_param_arns  = []
 
   container_definitions = {
     (local.container_name) = {
-      image                    = var.TF_VAR_container_image
+      image                    = var.TF_VAR_container_image # By default, this uses the latest image available at ghcr.io/formbricks/formbricks
       cpu                      = "1024"
       memory                   = "2048"
       readonly_root_filesystem = false
@@ -109,13 +110,13 @@ module "ecs_service" {
           containerPort = local.container_port
         }
       ]
-      secrets = [
-        for key, value in var.secrets_manager_data :
-        {
-          name      = key
-          valueFrom = "${value}:${key}::"
-        }
-      ]
+      # secrets = [
+      #   for key, value in var.secrets_manager_data :
+      #   {
+      #     name      = key
+      #     valueFrom = "${value}:${key}::"
+      #   }
+      # ]
       environment = []
     }
   }
@@ -187,6 +188,16 @@ module "alb" {
   subnets = data.aws_subnets.public.ids
 
   security_group_ingress_rules = {
+
+    all_http = {
+      from_port   = 80
+      to_port     = 80
+      ip_protocol = "tcp"
+      description = "HTTP web traffic"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+    # Uncomment the following block to enable HTTPS
+    /*
     all_https = {
       from_port   = 443
       to_port     = 443
@@ -194,7 +205,9 @@ module "alb" {
       description = "HTTPS web traffic"
       cidr_ipv4   = "0.0.0.0/0"
     }
+    */
   }
+
 
   security_group_egress_rules = {
     for subnet in data.aws_subnet.private_cidr :
@@ -205,14 +218,24 @@ module "alb" {
   }
 
   listeners = {
-    https = {
-      port            = 443
-      protocol        = "HTTPS"
-      certificate_arn = var.formbricks_ssl_certificate_arn
+    http = {
+      port     = "80"
+      protocol = "HTTP"
       forward = {
         target_group_key = "ecs-task"
       }
     }
+    # Uncomment the following block to enable HTTPS
+    /*
+    https = {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = var.ssl_certificate_arn
+      forward = {
+        target_group_key = "ecs-task"
+      }
+    }
+    */
   }
 
   target_groups = {
