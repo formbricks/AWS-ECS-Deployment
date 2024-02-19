@@ -25,11 +25,12 @@ terraform {
 ################################################################################
 
 locals {
-  name     = "prod-core-infra-formbricks"
+  name     = "core-infra-formbricks"
   vpc_cidr = "10.0.0.0/16"
   azs      = slice(data.aws_availability_zones.available.names, 0, 2)
   tags = {
     Environment = "prod"
+    Application = "formbricks"
   }
 }
 
@@ -80,7 +81,7 @@ module "ecs_cluster" {
 
 resource "aws_service_discovery_private_dns_namespace" "this" {
   name        = "${local.name}-service-discovery-private-dns-namespace"
-  description = "Service discovery for prod-core-infra-formbricks"
+  description = "Service discovery for core-infra-formbricks"
   vpc         = module.vpc.vpc_id
   tags        = local.tags
 }
