@@ -1,8 +1,34 @@
+################################################################################
+# (Optional) Integrating Terraform Cloud
+################################################################################
+
+# To use Terraform Cloud, follow these steps:
+
+# 1. Uncomment the code block below.
+# 2. Replace placeholders "your-organization-name" and "your-workspace-name" with your actual Terraform Cloud organization and workspace names.
+# 3. Refer to the Terraform Cloud documentation for details: https://developer.hashicorp.com/terraform/cloud-docs/overview
+
+/*
+terraform {
+  cloud {
+    organization = "your-organization-name"
+
+    workspaces {
+      name = "your-workspace-name"
+    }
+  }
+}
+*/
+
+################################################################################
+# Core Infrastructure Locals
+################################################################################
+
 locals {
-  name    = "prod-core-infra-formbricks"
+  name     = "prod-core-infra-formbricks"
   vpc_cidr = "10.0.0.0/16"
-  azs     = slice(data.aws_availability_zones.available.names, 0, 2)
-  tags    = {
+  azs      = slice(data.aws_availability_zones.available.names, 0, 2)
+  tags = {
     Environment = "prod"
   }
 }
@@ -38,13 +64,13 @@ module "ecs_cluster" {
       }
     }
   }
-  create_cloudwatch_log_group = true
+  create_cloudwatch_log_group            = true
   cloudwatch_log_group_retention_in_days = 60
   cluster_settings = {
-      name  = "containerInsights"
-      value = "enabled"
-    }
-  
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
   tags = local.tags
 }
 
@@ -75,9 +101,9 @@ module "vpc" {
   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 10)]
 
   # Redundancy
-  enable_nat_gateway      = true
-  single_nat_gateway      = false
-  one_nat_gateway_per_az  = true
+  enable_nat_gateway     = true
+  single_nat_gateway     = false
+  one_nat_gateway_per_az = true
 
   # Manage so we can name
   manage_default_network_acl    = true
