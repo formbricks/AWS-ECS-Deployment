@@ -1,19 +1,36 @@
+################################################################################
+# (Optional) Integrating Terraform Cloud
+################################################################################
+
+# To use Terraform Cloud, follow these steps:
+
+# 1. Uncomment the code block below.
+# 2. Replace placeholders "your-organization-name" and "your-workspace-name" with your actual Terraform Cloud organization and workspace names.
+# 3. Refer to the Terraform Cloud documentation for details: https://developer.hashicorp.com/terraform/cloud-docs/overview
+
+/*
 terraform {
   cloud {
-    organization = "Formbricks"
+    organization = "your-organization-name"
 
     workspaces {
-      name = "Prod-Core-Infra-ECS"
+      name = "your-workspace-name"
     }
   }
 }
+*/
+
+################################################################################
+# Core Infrastructure Locals
+################################################################################
 
 locals {
-  name    = "prod-core-infra"
+  name     = "core-infra-formbricks"
   vpc_cidr = "10.0.0.0/16"
-  azs     = slice(data.aws_availability_zones.available.names, 0, 3)
-  tags    = {
+  azs      = slice(data.aws_availability_zones.available.names, 0, 2)
+  tags = {
     Environment = "prod"
+    Application = "formbricks"
   }
 }
 
@@ -31,7 +48,7 @@ module "ecs_cluster" {
   source  = "terraform-aws-modules/ecs/aws//modules/cluster"
   version = "~> 5.6"
 
-  cluster_name = "${local.name}-ecs-cluster"
+  cluster_name = "${local.name}-cluster"
   cluster_service_connect_defaults = {
     namespace = aws_service_discovery_private_dns_namespace.this.arn
   }
@@ -48,13 +65,13 @@ module "ecs_cluster" {
       }
     }
   }
-  create_cloudwatch_log_group = true
+  create_cloudwatch_log_group            = true
   cloudwatch_log_group_retention_in_days = 60
   cluster_settings = {
-      name  = "containerInsights"
-      value = "enabled"
-    }
-  
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
   tags = local.tags
 }
 
@@ -64,7 +81,7 @@ module "ecs_cluster" {
 
 resource "aws_service_discovery_private_dns_namespace" "this" {
   name        = "${local.name}-service-discovery-private-dns-namespace"
-  description = "Service discovery for prod-core-infra"
+  description = "Service discovery for core-infra-formbricks"
   vpc         = module.vpc.vpc_id
   tags        = local.tags
 }
@@ -85,9 +102,9 @@ module "vpc" {
   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 10)]
 
   # Redundancy
-  enable_nat_gateway      = true
-  single_nat_gateway      = false
-  one_nat_gateway_per_az  = true
+  enable_nat_gateway     = true
+  single_nat_gateway     = false
+  one_nat_gateway_per_az = true
 
   # Manage so we can name
   manage_default_network_acl    = true

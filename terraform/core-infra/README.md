@@ -1,37 +1,51 @@
+# Core Infrastructure for Formbricks
 
-# Core Infrastructure
-This folder contains the Terraform code to deploy the core infrastructure for an ECS Fargate workload. The AWS resources created by the script are:
-* Networking
-	 * VPC
-	   * 3 public subnets, 1 per AZ. If a region has less than 3 AZs it will create same number of public subnets as AZs.
-	   * 3 private subnets, 1 per AZ. If a region has less than 3 AZs it will create same number of private subnets as AZs.
-	   * 3 NAT Gateways, 1 per AZ. (Redundancy)
-	   * 1 Internet Gateway
-	   * Associated Route Tables
-* 1 ECS Cluster with AWS CloudWatch Container Insights enabled.
-* CloudWatch log groups
-* CloudMap service discovery namespace `prod-core-infra-service-discovery-private-dns-namespace`
+This Terraform project provisions the essential AWS infrastructure to host Formbricks as an ECS Fargate workload.
 
-# Deployment
-* Add access key to the shell.
-	```shell
-	export AWS_ACCESS_KEY_ID=
-	export AWS_SECRET_ACCESS_KEY=
-	```
-* Run Terraform init to download the providers and install the modules
+**Resources Created**
+
+* **Networking (VPC):**
+    * Public subnets (one per AZ, using the first two in the region).
+    * Private subnets (one per AZ, using the first two in the region).
+    * NAT Gateways (one per AZ for high availability).
+    * Internet Gateway.
+    * Route tables for efficient traffic management.
+* **ECS Cluster:**
+    * Fargate capacity providers (optimized for a mix of regular and spot instances).
+    * CloudWatch Container Insights for cluster monitoring.
+* **Service Discovery:**
+    * Private DNS namespace for seamless internal service communication.
+
+**Prerequisites**
+
+* Terraform installed on your system.
+* Valid AWS credentials  configured (via env variables, profile, etc.)
+
+**Deployment**
+
+1. **Set AWS Credentials:**
+   ```shell
+   export AWS_ACCESS_KEY_ID=your_access_key
+   export AWS_SECRET_ACCESS_KEY=your_secret_key
+
+2. Initialize Terraform:
 	```shell
 	terraform init
 	```
-* Review the terraform plan output, take a look at the changes that terraform will execute, and then apply them:
+
+3. Review and Apply Changes:
 	```shell
 	terraform plan
-	terraform apply --auto-approve
+	terraform apply
 	```
-## Outputs
-After the execution of the Terraform code you will get an output with needed IDs and values needed as input for the next Terraform applies. 
 
-## Cleanup
-Run the following command if you want to delete all the resources created before. If you have created other blueprints and they use these infrastructure then destroy those blueprint resources first.
-	```shell
-	terraform destroy
-	```
+**Outputs**
+
+Terraform will provide values like the VPC ID and ECS cluster ARN on successful deployment.
+
+**Cleanup**
+
+```shell
+terraform destroy
+```
+Important: Destroy dependent resources (other Formbricks modules) before destroying this core infrastructure.
