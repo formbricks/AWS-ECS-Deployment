@@ -32,23 +32,12 @@ For more information on changing the scaling behavior, refer to the [Auto Scalin
 
 ## Deployment
 
-1. First deploy the core-infra for formbricks.
-2. Set AWS Credentials:
-   ```shell
-   export AWS_ACCESS_KEY_ID=your_access_key
-   export AWS_SECRET_ACCESS_KEY=your_secret_key
-   ```
+1. First deploy the core-infra for dev.
+2. Add access key to the shell.
+	 ```shell
+	 export AWS_ACCESS_KEY_ID=
+	 export AWS_SECRET_ACCESS_KEY=
 
-3. Initialize Terraform:
-	```shell
-	terraform init
-	```
-
-4. Review and Apply Changes:
-	```shell
-	terraform plan
-	terraform apply
-	```
 
 ## Using AWS Secrets Manager
 The ECS webapp service is configured with auto scaling, allowing it to dynamically adjust the number of instances based on demand. The minimum capacity is set to 2 instances, while the maximum capacity is set to 6 instances.
