@@ -22,7 +22,7 @@ terraform {
 locals {
   name           = "webapp-formbricks"
   container_port = 3000
-  container_name = "webapp-container-formbricks"
+  container_name = "webapp-formbricks-container"
   tags = {
     Application = "formbricks"
   }
@@ -212,7 +212,7 @@ module "alb" {
       description = "HTTP web traffic"
       cidr_ipv4   = "0.0.0.0/0"
     }
-    # Uncomment the following block to enable HTTPS
+    # Uncomment the following code block to enable HTTPS
     /*
     all_https = {
       from_port   = 443
@@ -241,7 +241,7 @@ module "alb" {
         target_group_key = "ecs-task"
       }
     }
-    # Uncomment the following block to enable HTTPS
+    # Uncomment the following code block to enable HTTPS
     /*
     https = {
       port            = 443
