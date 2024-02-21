@@ -1,6 +1,5 @@
 # AWS Infra
-
-![AWS_INFRA](https://github.com/formbricks/AWSInfra/assets/26037101/84146554-114d-4945-9afd-e7977784a7b4)
+![AWS Architecture Diagram](https://github.com/formbricks/AWSInfra/assets/26037101/c0100e03-d77a-4f55-9696-0e9a25b4cb1e)
 
 Design Decions:
 - One NAT Gateway per availability zone: Though this adds extra baseline cost, this prevents the app from going down if there is an outage in one specific zone.
