@@ -23,7 +23,7 @@ This Terraform project provisions the essential AWS infrastructure to host Formb
 
 **Deployment**
 
-1. **Set AWS Credentials:**
+1. Set AWS Credentials:
    ```shell
    export AWS_ACCESS_KEY_ID=your_access_key
    export AWS_SECRET_ACCESS_KEY=your_secret_key
