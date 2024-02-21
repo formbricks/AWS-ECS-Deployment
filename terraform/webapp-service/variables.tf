@@ -10,17 +10,17 @@ variable "TF_VAR_container_image" {
 
 variable "DATABASE_URL" {
   type    = string
-  default = "ghcr.io/formbricks/formbricks:latest"
+  default = "your-database-connection-string"
 }
 
 variable "ENCRYPTION_KEY" {
   type    = string
-  default = "ghcr.io/formbricks/formbricks:latest"
+  default = "your-encryption-key"
 }
 
 variable "NEXTAUTH_SECRET" {
   type    = string
-  default = "ghcr.io/formbricks/formbricks:latest"
+  default = "your-nextauth-secret"
 }
 
 # Optional: Uncomment and replace with your with AWS Secrets Manager ARN in ECS Task for sharing sensitive data
