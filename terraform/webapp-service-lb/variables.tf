@@ -5,7 +5,7 @@ variable "region" {
 
 variable "TF_VAR_container_image" {
   type    = string
-  default = "ghcr.io/formbricks/formbricks-experimental:latest"
+  default = "ghcr.io/formbricks/formbricks:latest"
 }
 
 variable "secrets_manager_data" {
@@ -32,7 +32,7 @@ variable "secrets_manager_data" {
   }
 }
 
-variable "formbricks_ssl_certificate_arn" {
+variable "ssl_certificate_arn" {
   type    = string
   default = ""
 }
