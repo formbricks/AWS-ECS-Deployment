@@ -24,7 +24,6 @@ locals {
   container_port = 3000
   container_name = "webapp-container-formbricks"
   tags = {
-    Environment = "prod"
     Application = "formbricks"
   }
 }
@@ -85,9 +84,7 @@ module "ecs_service" {
 
   enable_execute_command = false
 
-  desired_count = 3
-
-  autoscaling_min_capacity = 3
+  autoscaling_min_capacity = 2
   autoscaling_max_capacity = 6
 
 
@@ -110,14 +107,33 @@ module "ecs_service" {
           containerPort = local.container_port
         }
       ]
-      # secrets = [
-      #   for key, value in var.secrets_manager_data :
-      #   {
-      #     name      = key
-      #     valueFrom = "${value}:${key}::"
-      #   }
-      # ]
-      environment = []
+      environment = [
+        {
+          name  = "DATABASE_URL"
+          value = var.DATABASE_URL
+        },
+        {
+          name  = "ENCRYPTION_KEY"
+          value = var.ENCRYPTION_KEY
+        },
+        {
+          name  = "NEXTAUTH_SECRET"
+          value = var.ENCRYPTION_KEY
+        },
+      ]
+      # Security Note: We recommend using Secrets Manager or a similar service for sensitive data sharing with ECS Task.
+      # You can read more at:
+      # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html
+      # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data-tutorial.html
+      /*
+      secrets = [
+        for key, value in var.secrets_manager_data :
+        {
+          name      = key
+          valueFrom = "${value}:${key}::"
+        }
+      ]
+      */
     }
   }
 
@@ -181,8 +197,8 @@ module "alb" {
 
   name = "${local.name}-alb"
 
-  # For Prod only
-  enable_deletion_protection = true
+  # Uncomment the following line to enable deletion protection for production environments
+  # enable_deletion_protection = true
 
   vpc_id  = data.aws_vpc.vpc.id
   subnets = data.aws_subnets.public.ids
@@ -230,7 +246,7 @@ module "alb" {
     https = {
       port            = 443
       protocol        = "HTTPS"
-      certificate_arn = var.ssl_certificate_arn
+      certificate_arn = "your_ssl_certificate_arn"
       forward = {
         target_group_key = "ecs-task"
       }
