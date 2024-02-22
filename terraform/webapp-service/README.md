@@ -36,7 +36,7 @@ Formbricks in its containerized form relies on environment variables to provide 
 
 * `DATABASE_URL`: Connection details for your database.
 * `NEXTAUTH_SECRET`:  Used for secure authentication processes.
-* `ENCRYPTION`: A key for data encryption.
+* `ENCRYPTION_KEY`: A key for data encryption.
 
 Refer to the Formbricks documentation for more information:
 
@@ -45,9 +45,14 @@ Refer to the Formbricks documentation for more information:
 
 **Quick Setup**
 
-For initial setup, you can directly modify the `environment` section within your container definition. #TODO: ADD GITHUB PERMALINK AFTER MERGE TO MAIN
+This project includes Terraform variables to streamline the setup of essential container environment variables. To add more environment variables, modify the container definition Terraform code (TODO: ADD LINK).
 
-**Security Best Practices**
+For further guidance, refer to the following resources:
+-   Terraform AWS ECS Container Definition Module: [https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest/submodules/container-definition](https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest/submodules/container-definition)
+-   Terraform Variables: [https://developer.hashicorp.com/terraform/language/values/variables](https://developer.hashicorp.com/terraform/language/values/variables)
+-   Amazon ECS Environment Files: [https://docs.aws.amazon.com/AmazonECS/latest/developerguide/taskdef-envfiles.html](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/taskdef-envfiles.html)
+
+**Security Best Practice**
 
 We strongly recommend using a dedicated secrets management solution for production environments. Examples include AWS Secrets Manager or similar services. To facilitate this, we've included Terraform code as a starting point. See documentation for more details:
 - Specifying Sensitive Data in AWS ECS: [https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html)
@@ -63,13 +68,17 @@ We strongly recommend using a dedicated secrets management solution for producti
    export AWS_SECRET_ACCESS_KEY=your_secret_key
    ```
 3. Initialize Terraform:
-	```shell
-	terraform init
-	```
-4.
+   ```shell
+   terraform init
+   ```
+4.  Generate Security Keys:
+    Use the following command to generate values for `NEXTAUTH_SECRET` and `ENCRYPTION_KEY`.
+    ```shell
+    openssl rand -hex 32
+    ```
+    Note: Use different values for `NEXTAUTH_SECRET` and `ENCRYPTION_KEY`.
 5. Review and Apply Changes:
-	```shell
-	terraform plan
-	terraform apply
-	```
+    ```shell
+    terraform apply -var "DATABASE_URL=your_db_connection_string" -var "NEXTAUTH_SECRET=your_nextauth_secret" -var "ENCRYPTION_KEY=your_encryption_key"
+    ```
 
