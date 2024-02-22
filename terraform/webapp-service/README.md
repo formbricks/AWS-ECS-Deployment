@@ -28,7 +28,7 @@ The ECS webapp service leverages auto scaling to dynamically manage instance cou
 * Minimum capacity: 2 instances
 * Maximum capacity: 6 instances
 
-Adjust scaling behavior as needed.  See documentation for more details: [https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest/submodules/service](https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest/submodules/service)
+Adjust scaling behavior as needed. See documentation for more details: [https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest/submodules/service](https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest/submodules/service)
 
 ## Sharing Secrets with ECS Task Containers
 
@@ -38,7 +38,7 @@ Formbricks in its containerized form relies on environment variables to provide 
 * `NEXTAUTH_SECRET`:  Used for secure authentication processes.
 * `ENCRYPTION`: A key for data encryption.
 
-Refer to the Formbricks Documentation for more information:
+Refer to the Formbricks documentation for more information:
 
 * Setting Up Formbricks: [https://formbricks.com/docs/contributing/setup](https://formbricks.com/docs/contributing/setup)
 * External Authentication Providers: [https://formbricks.com/docs/self-hosting/external-auth-providers](https://formbricks.com/docs/self-hosting/external-auth-providers)
