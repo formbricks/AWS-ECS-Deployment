@@ -72,12 +72,13 @@ We strongly recommend using a dedicated secrets management solution for producti
    terraform init
    ```
 4.  Generate Security Keys:
+
     Use the following command to generate values for `NEXTAUTH_SECRET` and `ENCRYPTION_KEY`.
     ```shell
     openssl rand -hex 32
     ```
     Note: Use different values for `NEXTAUTH_SECRET` and `ENCRYPTION_KEY`.
-5. Review and Apply Changes:
+6. Review and Apply Changes:
     ```shell
     terraform apply -var "DATABASE_URL=your_db_connection_string" -var "NEXTAUTH_SECRET=your_nextauth_secret" -var "ENCRYPTION_KEY=your_encryption_key"
     ```
