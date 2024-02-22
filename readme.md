@@ -1,16 +1,72 @@
-# AWS Infra
+# Overview
 
-![AWS_INFRA](https://github.com/formbricks/AWSInfra/assets/26037101/84146554-114d-4945-9afd-e7977784a7b4)
+This repository provides the Terraform configuration to deploy and manage the Formbricks application on AWS. The infrastructure leverages ECS Fargate, Application Load Balancing, and other essential AWS services to deliver a scalable and reliable environment for the application. #TODO ADD LINK for AWS BLUEPRINTS and acknowledgements 
 
-Design Decions:
-- One NAT Gateway per availability zone: Though this adds extra baseline cost, this prevents the app from going down if there is an outage in one specific zone.
-- The database is outside the VPC, as our current production web app still needs to connect to the database. Moving it inside the VPC would involve downtime and changes to the infrastructure. Unless we settle for AWS, it's alright to keep the Database outside the VPC.
-- Using Fargate over EC2 for the ECS cluster. Fargate allows us to run containers without directly managing EC2 instances. If we use EC2, it would require a lot of fine-tuning to identify the right EC2 configurations and task placement strategy. Using Fargate eliminates this challenge.
-- Fargate compute allocation strategy: We require the ECS service to use a 50-50 mix of Fargate dedicated and Fargate Spot. With at least 20% of the containers running on dedicated Fargate compute. This allows us to stay cost-effective while ensuring reliability.
-- Secrets manager is not deployed via Terraform. As we need to share secrets across deployments, it doesn't make sense to redeploy secrets manager every time as that would entail losing the secrets and setting the secrets manager again.
-- Using Secrets Manager to store sensitive information. Our web app requires sensitive information such as DB URL, Next Auth secret, etc., to be passed to the containers as environment variables. Instead of directly passing environment variables as plain text while deploying infra, we instead grant IAM read access to secrets to the ECS task (containers). This allows us to securely inject sensitive data into the containers.
+## Key Features
 
-# Development Setup
-We use a devcontainer setup by AWSLabs to quickly grt development environment up and running quickly.
-Read more about it here: https://github.com/awslabs/aws-terraform-dev-container
- 
+* **Fargate Workload:**  ECS Fargate simplifies container deployment by removing the need to manage EC2 instances.
+* **Application Load Balancing:** Distributes incoming traffic for high availability.
+* **Networking:** Secure and segmented public and private subnets across availability zones.
+* **Service Discovery:** Streamlined communication between services via private DNS.
+* **Auto Scaling:** Dynamic capacity adjustments to accommodate changing traffic.
+* **Secrets Management(Optional):** Integration with AWS Secrets Manager for secure storage and retrieval of sensitive data.
+* **Development Consistency:** Standardized dev environments with devcontainer setup.
+
+## Components
+
+* **core-infra:** Foundational AWS infrastructure (VPC, subnets, ECS cluster, etc.).
+* **webapp:**  ECS service, tasks, load balancing, and supporting resources for the webapp.
+
+# Getting Started
+
+1. **Prerequisites**
+   * Terraform
+   * AWS credentials (configured via environment variables or a profile)
+
+2. **Deployment**
+   * Set AWS credentials:
+       ```bash
+       export AWS_ACCESS_KEY_ID=your_access_key
+       export AWS_SECRET_ACCESS_KEY=your_secret_key
+       ```
+   * Deploy core infrastructure:
+      *  Change directory to `terraform/core-infra`
+      *  Initialize Terraform: `terraform init`
+      *  Apply changes:  `terraform apply`
+      * More detailed instructions can be found here. # TODO ADD Permalink
+   * Deploy webapp infrastructure:
+      * Change directory to `terraform/webapp`
+      * Initialize Terraform: `terraform init`
+      * Generate values for `NEXTAUTH_SECRET` and `ENCRYPTION_KEY`: `openssl rand -hex 32`
+      * Apply changes, providing configuration values:
+           ```bash
+           terraform apply -var "DATABASE_URL=your_db_connection_string" \
+                           -var "NEXTAUTH_SECRET=your_nextauth_secret" \
+                           -var "ENCRYPTION_KEY=your_encryption_key"
+           ```
+      * More detailed instructions can be found here. # TODO ADD Permalink           
+
+3. Access your application:
+   Locate the public DNS name or IP address of the Application Load Balancer in the AWS console or Terraform output.
+
+  **Important Notes**
+  
+  * **Destroy order:** Destroy webapp infrastructure before core infrastructure. 
+  * **Data persistence:**  Ensure  adequate database provisions (EBS volumes, Aurora, etc.) for production workloads.
+  * **Security:**  Use AWS Secrets Manager for storing sensitive information in production environments.
+
+## AWS Architecture & Design Decisions
+#TODO ADD DAIGRAM HERE
+* Fargate: Simplified container management, educing operational overhead.
+* Mixed Compute (Dedicated and Spot): Cost-effectiveness with availability guarantees.
+* Public/Private Subnets with NAT Gateways: Security with controlled internet access.
+
+**Development**
+
+* **AWS Devcontainer:** Refer to `https://github.com/awslabs/aws-terraform-dev-container` for instructions on setting up a consistent development environment.
+
+## Additional Information
+
+* Formbricks Documentation: https://formbricks.com/docs
+* Terraform AWS ECS Modules: https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest
+* AWS ECS Blueprints: https://github.com/aws-ia/ecs-blueprints
