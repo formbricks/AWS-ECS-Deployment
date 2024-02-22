@@ -3,26 +3,19 @@
 This repository provides the Terraform configuration to deploy and manage the Formbricks application on AWS. The infrastructure leverages ECS Fargate, Application Load Balancing, and other essential AWS services to deliver a scalable and reliable environment for the application. #TODO ADD LINK for AWS BLUEPRINTS and acknowledgements 
 
 ## Key Features
-
-* **Fargate Workload:**  ECS Fargate simplifies container deployment by removing the need to manage EC2 instances.
+#TODO ADD DAIGRAM HERE
+* **Fargate Workload:** ECS Fargate simplifies container deployment by removing the need to manage EC2 instances.
+* **Mixed Compute (Dedicated and Spot):** Cost-effectiveness with availability guarantees.
 * **Application Load Balancing:** Distributes incoming traffic for high availability.
 * **Networking:** Secure and segmented public and private subnets across availability zones.
 * **Service Discovery:** Streamlined communication between services via private DNS.
 * **Auto Scaling:** Dynamic capacity adjustments to accommodate changing traffic.
 * **Secrets Management(Optional):** Integration with AWS Secrets Manager for secure storage and retrieval of sensitive data.
-* **Development Consistency:** Standardized dev environments with devcontainer setup.
-
-## Components
-
-* **core-infra:** Foundational AWS infrastructure (VPC, subnets, ECS cluster, etc.).
-* **webapp:**  ECS service, tasks, load balancing, and supporting resources for the webapp.
 
 # Getting Started
-
 1. **Prerequisites**
    * Terraform
    * AWS credentials (configured via environment variables or a profile)
-
 2. **Deployment**
    * Set AWS credentials:
        ```bash
@@ -45,8 +38,7 @@ This repository provides the Terraform configuration to deploy and manage the Fo
                            -var "ENCRYPTION_KEY=your_encryption_key"
            ```
       * More detailed instructions can be found here. # TODO ADD Permalink           
-
-3. Access your application:
+3. **Access your application**:
    Locate the public DNS name or IP address of the Application Load Balancer in the AWS console or Terraform output.
 
   **Important Notes**
@@ -54,12 +46,6 @@ This repository provides the Terraform configuration to deploy and manage the Fo
   * **Destroy order:** Destroy webapp infrastructure before core infrastructure. 
   * **Data persistence:**  Ensure  adequate database provisions (EBS volumes, Aurora, etc.) for production workloads.
   * **Security:**  Use AWS Secrets Manager for storing sensitive information in production environments.
-
-## AWS Architecture & Design Decisions
-#TODO ADD DAIGRAM HERE
-* Fargate: Simplified container management, educing operational overhead.
-* Mixed Compute (Dedicated and Spot): Cost-effectiveness with availability guarantees.
-* Public/Private Subnets with NAT Gateways: Security with controlled internet access.
 
 **Development**
 
