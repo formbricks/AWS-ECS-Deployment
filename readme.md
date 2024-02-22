@@ -1,11 +1,11 @@
 # Overview
+This repository provides the Terraform configuration to deploy and manage the Formbricks application on AWS. This project builds on top of the excellent [Amazon ECS Blueprints](https://github.com/aws-ia/ecs-blueprints) developed by the AWS team. It leverages ECS Fargate, Application Load Balancing, and other essential AWS services to deliver a scalable and reliable environment for the Formbricks application.
 
-This repository provides the Terraform configuration to deploy and manage the Formbricks application on AWS. The infrastructure leverages ECS Fargate, Application Load Balancing, and other essential AWS services to deliver a scalable and reliable environment for the application. #TODO ADD LINK for AWS BLUEPRINTS and acknowledgements 
 
 ## Key Features
 #TODO ADD DAIGRAM HERE
 * **Fargate Workload:** ECS Fargate simplifies container deployment by removing the need to manage EC2 instances.
-* **Mixed Compute (Dedicated and Spot):** Cost-effectiveness with availability guarantees.
+* **Mixed Fargate Compute (Dedicated and Spot):** Cost-effectiveness with availability guarantees.
 * **Application Load Balancing:** Distributes incoming traffic for high availability.
 * **Networking:** Secure and segmented public and private subnets across availability zones.
 * **Service Discovery:** Streamlined communication between services via private DNS.
@@ -38,18 +38,14 @@ This repository provides the Terraform configuration to deploy and manage the Fo
                            -var "ENCRYPTION_KEY=your_encryption_key"
            ```
       * More detailed instructions can be found here. # TODO ADD Permalink           
-3. **Access your application**:
-   Locate the public DNS name or IP address of the Application Load Balancer in the AWS console or Terraform output.
+3. **Access your application**  
+Locate the public DNS name or IP address of the Application Load Balancer in the AWS console or Terraform output.
 
   **Important Notes**
   
   * **Destroy order:** Destroy webapp infrastructure before core infrastructure. 
-  * **Data persistence:**  Ensure  adequate database provisions (EBS volumes, Aurora, etc.) for production workloads.
-  * **Security:**  Use AWS Secrets Manager for storing sensitive information in production environments.
-
-**Development**
-
-* **AWS Devcontainer:** Refer to `https://github.com/awslabs/aws-terraform-dev-container` for instructions on setting up a consistent development environment.
+  * **Data persistence:** Ensure adequate database provisions for production workloads.
+  * **Security:** Use AWS Secrets Manager for storing sensitive information in production environments.
 
 ## Additional Information
 
