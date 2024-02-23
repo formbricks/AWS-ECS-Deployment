@@ -3,7 +3,7 @@ This repository provides the Terraform configuration to deploy and manage the Fo
 
 
 ## Key Features
-#TODO ADD DAIGRAM HERE
+![AWS Architecture Diagram](https://github.com/formbricks/AWSInfra/assets/26037101/c0100e03-d77a-4f55-9696-0e9a25b4cb1e)
 * **Fargate Workload:** ECS Fargate simplifies container deployment by removing the need to manage EC2 instances.
 * **Mixed Fargate Compute (Dedicated and Spot):** Cost-effectiveness with availability guarantees.
 * **Application Load Balancing:** Distributes incoming traffic for high availability.
@@ -23,9 +23,9 @@ This repository provides the Terraform configuration to deploy and manage the Fo
        export AWS_SECRET_ACCESS_KEY=your_secret_key
        ```
    * Deploy core infrastructure:
-      *  Change directory to `terraform/core-infra`
-      *  Initialize Terraform: `terraform init`
-      *  Apply changes:  `terraform apply`
+      * Change directory to `terraform/core-infra`
+      * Initialize Terraform: `terraform init`
+      * Apply changes:  `terraform apply`
       * More detailed instructions can be found here. # TODO ADD Permalink
    * Deploy webapp infrastructure:
       * Change directory to `terraform/webapp`
