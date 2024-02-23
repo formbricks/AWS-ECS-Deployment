@@ -61,7 +61,7 @@ We strongly recommend using a dedicated secrets management solution for producti
 
 ## Deployment
 
-1. First deploy the core-infra for formbricks.
+1. First deploy the core-infra for Formbricks.
 2. Set AWS Credentials:
    ```shell
    export AWS_ACCESS_KEY_ID=your_access_key
