@@ -1,52 +1,53 @@
 # Core Infrastructure for Formbricks
 
-This Terraform project provisions the essential AWS infrastructure to host Formbricks as an ECS Fargate workload.
+This Terraform module provisions the essential AWS infrastructure to host Formbricks as an ECS Fargate workload.
 
-**Resources Created**
+## Resources Created
 
 * **Networking (VPC):**
     * Public subnets (one per AZ, using the first two in the region).
     * Private subnets (one per AZ, using the first two in the region).
     * NAT Gateways (one per AZ for high availability).
     * Internet Gateway.
-    * Route tables for efficient traffic management.
+    * Associated Route Tables.
 * **ECS Cluster:**
     * Fargate capacity providers (optimized for a mix of regular and spot instances).
-    * CloudWatch Container Insights for cluster monitoring.
+    * CloudWatch log groups with Container Insights enabled for cluster monitoring.
 * **Service Discovery:**
     * Private DNS namespace for seamless internal service communication.
 
-**Prerequisites**
+## Deployment
 
-* Terraform installed on your system.
-* Valid AWS credentials  configured (via env variables, profile, etc.)
+1. **Prerequisites**
+    * Terraform installed on your system.
+    * Valid AWS credentials configured (via env variables, profile, etc.)
+    * Change directory to `terraform/core-infra`
 
-**Deployment**
-
-1. Set AWS Credentials:
+2. **Set AWS Credentials**
    ```shell
    export AWS_ACCESS_KEY_ID=your_access_key
    export AWS_SECRET_ACCESS_KEY=your_secret_key
    ```
 
-2. Initialize Terraform:
+3. **Initialize Terraform**
 	```shell
 	terraform init
 	```
 
-3. Review and Apply Changes:
+4. **Review and Apply Changes**
 	```shell
 	terraform plan
 	terraform apply
 	```
 
-**Outputs**
+5. **Outputs**  
+    
+    Terraform will provide values for `vpc_id`, `cluster_arn`, `cluster_id` and `service_discovery_namespaces` on successful deployment.
 
-Terraform will provide values like the VPC ID and ECS cluster ARN on successful deployment.
+## Cleanup
+**Important:** Before destroying this core infrastructure, ensure you've destroyed any dependent resources created by other Formbricks modules.
 
-**Cleanup**
-
+To destroy the AWS resources created by this module, use:
 ```shell
 terraform destroy
 ```
-Important: Destroy dependent resources (other Formbricks modules) before destroying this core infrastructure.
