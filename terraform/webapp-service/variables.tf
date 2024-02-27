@@ -31,21 +31,6 @@ variable "secrets_manager_data" {
     "ENCRYPTION_KEY"         = "ENCRYPTION_KEY"
     "NEXTAUTH_SECRET"        = "NEXTAUTH_SECRET"
     "DATABASE_URL"           = "DATABASE_URL"
-    "IS_FORMBRICKS_CLOUD"    = "IS_FORMBRICKS_CLOUD"
-    "WEBAPP_URL"             = "WEBAPP_URL"
-    "TERMS_URL"              = "TERMS_URL"
-    "IMPRINT_URL"            = "IMPRINT_URL"
-    "PRIVACY_URL"            = "PRIVACY_URL"
-    "ENTERPRISE_LICENSE_KEY" = "ENTERPRISE_LICENSE_KEY"
-    "NEXT_PUBLIC_SENTRY_DSN" = "NEXT_PUBLIC_SENTRY_DSN"
-    "CRON_SECRET"            = "CRON_SECRET"
-    "TELEMETRY_DISABLED"     = "TELEMETRY_DISABLED"
-    "NEXTAUTH_URL"           = "NEXTAUTH_URL"
-    "MAIL_FROM"              = "MAIL_FROM"
-    "SMTP_HOST"              = "SMTP_HOST"
-    "SMTP_PASSWORD"          = "SMTP_PASSWORD"
-    "SMTP_PORT"              = "SMTP_PORT"
-    "SMTP_USER"              = "SMTP_USER"
   }
 }
 */
