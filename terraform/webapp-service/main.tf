@@ -82,11 +82,8 @@ module "ecs_service" {
   name        = "${local.name}-service"
   cluster_arn = data.aws_ecs_cluster.core_infra.arn
 
-
-
   autoscaling_min_capacity = 2
   autoscaling_max_capacity = 6
-
 
   # Task Definition IAM Roles
   create_task_exec_iam_role = true
