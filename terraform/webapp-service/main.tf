@@ -82,7 +82,7 @@ module "ecs_service" {
   name        = "${local.name}-service"
   cluster_arn = data.aws_ecs_cluster.core_infra.arn
 
-  enable_execute_command = false
+
 
   autoscaling_min_capacity = 2
   autoscaling_max_capacity = 6
@@ -92,7 +92,7 @@ module "ecs_service" {
   create_task_exec_iam_role = true
   task_exec_iam_role_name   = "webapp-formbricks-ecsTaskExecRole"
   create_task_exec_policy   = true
-  task_exec_ssm_param_arns  = []
+
   # task_exec_secret_arns     = values(var.secrets_manager_data)[*] # Uncomment this line if you are using Secrets Manager
 
   container_definitions = {
@@ -197,8 +197,7 @@ module "alb" {
 
   name = "${local.name}-alb"
 
-  # Uncomment the following line to enable deletion protection for production environments
-  # enable_deletion_protection = true
+  enable_deletion_protection = true # Can be disabled for non-production workloads
 
   vpc_id  = data.aws_vpc.vpc.id
   subnets = data.aws_subnets.public.ids
@@ -212,6 +211,7 @@ module "alb" {
       description = "HTTP web traffic"
       cidr_ipv4   = "0.0.0.0/0"
     }
+
     # Uncomment the following code block to enable HTTPS
     /*
     all_https = {
@@ -241,6 +241,7 @@ module "alb" {
         target_group_key = "ecs-task"
       }
     }
+
     # Uncomment the following code block to enable HTTPS
     /*
     https = {
