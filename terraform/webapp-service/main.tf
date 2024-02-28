@@ -194,7 +194,7 @@ module "alb" {
 
   name = "${local.name}-alb"
 
-  enable_deletion_protection = true # Can be disabled for non-production workloads
+  enable_deletion_protection = false
 
   vpc_id  = data.aws_vpc.vpc.id
   subnets = data.aws_subnets.public.ids
