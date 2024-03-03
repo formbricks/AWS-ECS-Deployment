@@ -93,3 +93,9 @@ Choose the method that best suits your environment and security requirements.
     ```
     Using Secrets Manager:  
     Refer to [detailed instructions](https://github.com/formbricks/AWSInfra/blob/dceef034b2d61c94fc95f39b58c1d1f129406752/terraform/webapp-service/README.md?plain=1#L49-L49C75) in the README.
+
+## Cleanup
+To destroy the AWS resources created by this module, use:
+```shell
+terraform destroy
+```
