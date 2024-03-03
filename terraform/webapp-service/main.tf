@@ -82,8 +82,12 @@ module "ecs_service" {
   name        = "${local.name}-service"
   cluster_arn = data.aws_ecs_cluster.core_infra.arn
 
-  autoscaling_min_capacity = 2
-  autoscaling_max_capacity = 6
+  desired_count      = 2
+  enable_autoscaling = true
+  autoscaling_max_capacity = 4
+
+  enable_ecs_managed_tags = true
+  requires_compatibilities = ["FARGATE"]
 
   # Task Definition IAM Roles
   create_task_exec_iam_role = true
@@ -104,6 +108,7 @@ module "ecs_service" {
           containerPort = local.container_port
         }
       ]
+
       environment = [
         {
           name  = "DATABASE_URL"
@@ -117,7 +122,16 @@ module "ecs_service" {
           name  = "NEXTAUTH_SECRET"
           value = var.ENCRYPTION_KEY
         },
+        {
+          name  = "NEXTAUTH_URL"
+          value = "https://${module.alb.dns_name}"
+        },
+        {
+          name  = "WEBAPP_URL"
+          value = "https://${module.alb.dns_name}"
+        }
       ]
+
       # Security Note: We recommend using Secrets Manager or a similar service for sensitive data sharing with ECS Task.
       # You can read more at:
       # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html
