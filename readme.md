@@ -9,7 +9,6 @@ This repository provides the Terraform configuration to deploy and manage the Fo
 * **Application Load Balancing:** Distributes incoming traffic for high availability.
 * **Networking:** Secure and segmented public and private subnets across availability zones.
 * **Service Discovery:** Streamlined communication between services via private DNS.
-* **Auto Scaling:** Dynamic capacity adjustments to accommodate changing traffic.
 * **Secrets Management(Optional):** Integration with AWS Secrets Manager for secure storage and retrieval of sensitive data.
 
 # Getting Started
