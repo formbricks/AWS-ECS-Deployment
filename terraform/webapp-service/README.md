@@ -91,5 +91,5 @@ Choose the method that best suits your environment and security requirements.
                     -var "NEXTAUTH_SECRET=your_nextauth_secret" \
                     -var "ENCRYPTION_KEY=your_encryption_key"
     ```
-    Using Secrets Manager: 
-    Refer to detailed instructions in the README.
+    Using Secrets Manager:  
+    Refer to [detailed instructions](https://github.com/formbricks/AWSInfra/blob/dceef034b2d61c94fc95f39b58c1d1f129406752/terraform/webapp-service/README.md?plain=1#L49-L49C75) in the README.
