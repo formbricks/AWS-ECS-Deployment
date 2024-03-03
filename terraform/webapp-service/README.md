@@ -50,7 +50,7 @@ Choose the method that best suits your environment and security requirements.
 
 * Disable using [environment variables](https://github.com/formbricks/AWSInfra/blob/9b6c57d42fe3c527b33901bd62b633e105bdbf7a/terraform/webapp-service/main.tf#L108-L119C11) in container task definition to ensure sensitive information isn't passed directly through environment variables. 
 * [Setup the Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/create_database_secret.html). 
-* Store values for the following secrets: `DATABASE_URL`, `NEXTAUTH_SECRET` and `ENCRYPTION_KEY`.
+* Store values for the following secrets: `DATABASE_URL`, `NEXTAUTH_SECRET` and `ENCRYPTION_KEY`. After storing the secret, it would look something like [this](https://github.com/formbricks/AWSInfra/blob/main/images/sample_secret_data.png).
 * Modify the Terraform Code:
     * Update the [Terraform variables](https://github.com/formbricks/AWSInfra/blob/9b6c57d42fe3c527b33901bd62b633e105bdbf7a/terraform/webapp-service/variables.tf#L28-L35C2) file (variables.tf) to accept the ARNs (Amazon Resource Names) of the secrets as input.
     * Configure the `ecs_module` Terraform code (main.tf) with the following:
