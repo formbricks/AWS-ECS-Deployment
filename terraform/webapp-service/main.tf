@@ -83,8 +83,7 @@ module "ecs_service" {
   cluster_arn = data.aws_ecs_cluster.core_infra.arn
 
   desired_count      = 2
-  enable_autoscaling = true
-  autoscaling_max_capacity = 4
+  enable_autoscaling = false
 
   enable_ecs_managed_tags = true
   requires_compatibilities = ["FARGATE"]
