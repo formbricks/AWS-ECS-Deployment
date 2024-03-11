@@ -26,7 +26,7 @@ This repository provides the Terraform configuration to deploy and manage the Fo
       * Change directory to `terraform/core-infra`
       * Initialize Terraform: `terraform init`
       * Apply changes:  `terraform apply`
-      * More detailed instructions can be found [here](https://github.com/formbricks/AWSInfra/blob/main/terraform/core-infra/README.md).
+      * More detailed instructions can be found [here](./terraform/core-infra/README.md).
    * Deploy webapp infrastructure:
       * Change directory to `terraform/webapp`
       * Initialize Terraform: `terraform init`
@@ -37,7 +37,7 @@ This repository provides the Terraform configuration to deploy and manage the Fo
                            -var "NEXTAUTH_SECRET=your_nextauth_secret" \
                            -var "ENCRYPTION_KEY=your_encryption_key"
            ```
-      * More detailed instructions can be found [here](https://github.com/formbricks/AWSInfra/blob/main/terraform/webapp-service/README.md).       
+      * More detailed instructions can be found [here](./terraform/webapp-service/README.md).       
 3. **Access your application**  
 Locate the public DNS name or IP address of the Application Load Balancer in the AWS console or Terraform output.
 
