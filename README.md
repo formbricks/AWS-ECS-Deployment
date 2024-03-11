@@ -41,7 +41,7 @@ This repository provides the Terraform configuration to deploy and manage the Fo
 3. **Access your application**  
 Locate the public DNS name or IP address of the Application Load Balancer in the AWS console or Terraform output.
 
-  **Important Notes**
+  :warning: **Important Notes** :warning:
   * **Security:** Use AWS Secrets Manager for storing sensitive information in production environments.
   * **Destroy order:** Destroy webapp service infrastructure before core infrastructure. 
   * **Data persistence:** Ensure adequate database provisions for production workloads.
