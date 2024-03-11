@@ -92,7 +92,6 @@ module "ecs_service" {
   create_task_exec_iam_role = true
   task_exec_iam_role_name   = "webapp-formbricks-ecsTaskExecRole"
   create_task_exec_policy   = true
-
   # task_exec_secret_arns     = values(var.secrets_manager_data)[*] # Uncomment this line if you are using Secrets Manager
 
   container_definitions = {
