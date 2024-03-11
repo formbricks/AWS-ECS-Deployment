@@ -86,9 +86,10 @@ Formbricks documentation provides further details: [https://formbricks.com/docs/
                     -var "NEXTAUTH_SECRET=your_nextauth_secret" \
                     -var "ENCRYPTION_KEY=your_encryption_key"
     ```
-    Using Secrets Manager:  
-    Refer to [detailed instructions](https://github.com/formbricks/AWSInfra/blob/dceef034b2d61c94fc95f39b58c1d1f129406752/terraform/webapp-service/README.md?plain=1#L49-L49C75) in the README.
-
+    Using Secrets Manager:
+    ```shell
+    terraform apply -var-file=secrets_manager_data.tfvars
+    ```  
 ## Cleanup
 To destroy the AWS resources created by this module, use:
 ```shell
