@@ -43,7 +43,7 @@ Locate the public DNS name or IP address of the Application Load Balancer in the
 
   :warning: **Important Notes** :warning:
   * **Security:** Use AWS Secrets Manager for storing sensitive information in production environments.
-  * **Destroy order:** Destroy webapp service infrastructure before core infrastructure. 
+  * **Destroy order:** Destroy webapp service infrastructure before destroying core infrastructure. 
   * **Data persistence:** Ensure adequate database provisions for production workloads.
 
 ## Additional Information
