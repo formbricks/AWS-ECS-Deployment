@@ -2,7 +2,7 @@
 This repository provides the Terraform configuration to deploy and manage the Formbricks application on AWS. This project builds on top of the excellent [Amazon ECS Blueprints](https://github.com/aws-ia/ecs-blueprints) developed by the AWS team. It leverages ECS on Fargate, Application Load Balancer, and other essential AWS services to deliver a scalable and reliable environment for the Formbricks application.
 
 ## AWS Architecture Diagram
-![AWS Architecture Diagram](https://github.com/formbricks/AWSInfra/assets/26037101/c0100e03-d77a-4f55-9696-0e9a25b4cb1e)
+![AWS Architecture Diagram](./formbricks_aws_architecture.png)
 
 ## Key Features
 * **Fargate Workload:** ECS Fargate simplifies container deployment by removing the need to manage EC2 instances.
