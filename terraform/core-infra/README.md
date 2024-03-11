@@ -11,7 +11,7 @@ This Terraform module provisions the essential AWS infrastructure to host Formbr
     * Internet Gateway.
     * Associated Route Tables.
 * **ECS Cluster:**
-    * Fargate capacity providers (optimized for a mix of regular and spot instances).
+    * Fargate capacity providers (optimized for a mix of dedicated and spot instances).
     * CloudWatch log groups with Container Insights enabled for cluster monitoring.
 * **Service Discovery:**
     * Private DNS namespace for seamless internal service communication.
