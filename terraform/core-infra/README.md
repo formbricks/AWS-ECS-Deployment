@@ -42,7 +42,7 @@ This Terraform module provisions the essential AWS infrastructure to host Formbr
 
 5. **Outputs**  
     
-    Terraform will provide values for `vpc_id`, `cluster_arn`, `cluster_id` and `service_discovery_namespaces` on successful deployment.
+    Terraform will output values for `vpc_id`, `cluster_arn`, `cluster_id` and `service_discovery_namespaces` on successful deployment.
 
 ## Cleanup
 **Important:** Before destroying this core infrastructure, ensure you've destroyed any dependent resources created by other Formbricks modules.
