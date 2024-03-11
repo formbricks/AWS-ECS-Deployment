@@ -2,14 +2,12 @@
 This Terraform module provisions the AWS infrastructure to host Formbricks webapp containers as an ECS Fargate workload.
 
 ## Resources Created
-* **ECS Service:**  
-    * Maintains a consistent running state of two tasks.
-    * Task execution IAM roles facilitate secure access to Secrets Manager.
-    * CloudMap registration for service discovery via DNS.
-
-* **ECS Tasks:**  
-Deployed within private subnets for enhanced security.
-
+* **ECS Service:**
+   * Maintains a consistent running state of two tasks.
+   * Task execution IAM roles facilitate secure access to Secrets Manager.
+   * CloudMap registration for service discovery via DNS.
+* **ECS Tasks:**
+   * Deployed within private subnets for enhanced security.
 * **Application Load Balancer (ALB):**
     * Distributes incoming traffic across tasks in multiple availability zones.
     * Key attributes:
@@ -17,16 +15,15 @@ Deployed within private subnets for enhanced security.
         * Public subnet placement.
         * HTTP listener on port 80.
     * Deletion protection is disabled by default. Can be configured [here](https://github.com/formbricks/AWSInfra/blob/727efcd72f9dbb9b0c2ce2067dab0325f222413f/terraform/webapp-service/main.tf#L197C1-L197C37).
-    * **HTTPS Support:**   
+    * **HTTPS Support:**
     Enable by uncommenting the relevant `alb` resource code in `main.tf` and providing your certificate ARN. See documentation for more details:
         - Create HTTPS Listener: [https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html)
         - ALB Resource: [https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb)
-
-* **Task Security Group:**  
-Enables container access (port 3000) from the ALB security group alongside full egress permissions.
+* **Task Security Group:**
+   * Enables container access (port 3000) from the ALB security group with full egress permissions.
 
 ## Sharing Secrets with ECS Task Containers
-Formbricks, in its containerized form, requires sensitive configuration details provided through environment variables. Here are the essential ones:
+Formbricks docker container, requires sensitive configuration details provided through environment variables. Here are the essential ones:
 
 * **DATABASE_URL:** Connection details for your database.
 * **NEXTAUTH_SECRET:** Used for secure authentication processes.
@@ -34,9 +31,7 @@ Formbricks, in its containerized form, requires sensitive configuration details 
 
 Formbricks documentation provides further details: [https://formbricks.com/docs/self-hosting/external-auth-providers](https://formbricks.com/docs/self-hosting/external-auth-providers)
 
-**Methods for Sharing Secrets:**
-
-Choose the method that best suits your environment and security requirements.
+**Methods for Sharing Secrets with ECS Tasks (Containers):**
 
 **1. Environment Variables in Task Definition (Ideal for Quick Setup and Non-Production Workloads)**
 *   Modify the [container task definition](https://github.com/formbricks/AWSInfra/blob/c736612209c70bafa814fa7f2db8a65b91496742/terraform/webapp-service/main.tf#L110-L123C8), adding more environment variables as required.
