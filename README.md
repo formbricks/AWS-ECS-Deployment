@@ -16,6 +16,7 @@ This repository provides the Terraform configuration to deploy and manage the Fo
 1. **Prerequisites**
    * Terraform CLI: Ensure Terraform CLI is installed on your machine. For detailed instructions on installation, visit the [Terraform Installation Guide](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
    * AWS credentials (configured via environment variables or a profile) with administrator role access.
+   * Clone the GitHub Repository.
 2. **Deployment**
    * Set AWS credentials:
        ```bash
