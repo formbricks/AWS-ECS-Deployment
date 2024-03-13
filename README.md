@@ -14,8 +14,8 @@ This repository provides the Terraform configuration to deploy and manage the Fo
 
 # Quickstart
 1. **Prerequisites**
-   * Terraform
-   * AWS credentials (configured via environment variables or a profile)
+   * Terraform CLI: Ensure Terraform CLI is installed on your machine. For detailed instructions on installation, visit the [Terraform Installation Guide](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
+   * AWS credentials (configured via environment variables or a profile) with administrator role access.
 2. **Deployment**
    * Set AWS credentials:
        ```bash
@@ -28,7 +28,7 @@ This repository provides the Terraform configuration to deploy and manage the Fo
       * Apply changes:  `terraform apply`
       * More detailed instructions can be found [here](./terraform/core-infra/README.md).
    * Deploy webapp infrastructure:
-      * Change directory to `terraform/webapp`
+      * Change directory to `terraform/webapp-service`
       * Initialize Terraform: `terraform init`
       * Generate values for `NEXTAUTH_SECRET` and `ENCRYPTION_KEY`: `openssl rand -hex 32`
       * Apply changes, providing configuration values:
