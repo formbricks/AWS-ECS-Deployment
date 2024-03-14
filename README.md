@@ -21,6 +21,7 @@ This repository provides the Terraform configuration to deploy and manage the Fo
    * Terraform CLI: Ensure Terraform CLI is installed on your machine. For detailed instructions on installation, visit the [Terraform Installation Guide](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
    * AWS credentials (configured via environment variables or a profile) with administrator role access.
    * Clone the GitHub Repository.
+   * Connection URL for PotrgesSQL Database.
 2. **Deployment**
    * Set AWS credentials:
        ```bash
@@ -28,11 +29,13 @@ This repository provides the Terraform configuration to deploy and manage the Fo
        export AWS_SECRET_ACCESS_KEY=your_secret_key
        ```
    * Deploy core infrastructure:
+      > This step provisions the VPC, ECS Cluster and Cloud Map. 
       * Change directory to `terraform/core-infra`
       * Initialize Terraform: `terraform init`
       * Apply changes:  `terraform apply`
       * More detailed instructions can be found [here](./terraform/core-infra/README.md).
    * Deploy webapp infrastructure:
+      > This step provisions the ECS Service, ECS Task and Application Load Balancer. 
       * Change directory to `terraform/webapp-service`
       * Initialize Terraform: `terraform init`
       * Generate values for `NEXTAUTH_SECRET` and `ENCRYPTION_KEY`: `openssl rand -hex 32`
