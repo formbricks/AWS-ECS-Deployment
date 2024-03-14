@@ -91,7 +91,7 @@ Formbricks documentation provides further details: [https://formbricks.com/docs/
     terraform apply -var-file=secrets_manager_data.tfvars
     ```
 7.  **Output**
-    Terraform will output the application URL which can be used to interact with your Formbricks application on successful deployment.
+    Terraform will output the `application URL` which can be used to interact with your Formbricks application on successful deployment.
   
 ## Cleanup
 To destroy the AWS resources created by this module, use:
